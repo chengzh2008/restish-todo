@@ -17,18 +17,22 @@ newtype Options = Options { cmd:: Command }
 server :: IO ()
 server = putStrLn "Server starting..."
 
+monitor :: IO ()
+monitor = putStrLn "Monitoring..."
+
 -- | CLI options parser
 opts :: Parser (IO ())
 opts = subparser commands
   where
-    serverAction :: Parser (IO ())
-    serverAction = pure server
-
     serverCmd :: ParserInfo (IO ())
-    serverCmd = info serverAction idm
+    serverCmd = info (pure server) idm
+
+    monitorCmd :: ParserInfo (IO ())
+    monitorCmd = info (pure monitor) idm
 
     commands :: Mod CommandFields (IO ())
     commands = command "server" serverCmd
+               <> command "monitor" monitorCmd
 
 
 
